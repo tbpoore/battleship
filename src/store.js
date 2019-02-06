@@ -15,21 +15,16 @@ const ships = {
     size: 2,
     orientation: ShipOrientation.HORIZONTAL,
     squareIds: []
-  },
-  3: {
-    id: 3,
-    size: 3,
-    orientation: ShipOrientation.HORIZONTAL,
-    squareIds: []
   }
 };
 
 const initialGameState = {
   game: {
     stage: "MENU",
-    boardSize: 8,
+    boardSize: 6,
     currentPlayerId: "1",
     opponentPlayerId: "2",
+    currentHoverSquareId: "",
     bombingStatusMessage: "",
     playerBoards: {
       1: {},

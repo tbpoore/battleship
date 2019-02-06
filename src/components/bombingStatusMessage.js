@@ -20,7 +20,7 @@ class BombingStatusMessage extends Component {
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           open={message !== ""}
           message={
-            <Typography style={{ color: "#ffffff" }} variant='h4'>
+            <Typography style={{ color: "#ffffff" }} variant="h4">
               {message}
             </Typography>
           }

@@ -84,10 +84,7 @@ const movePlayerShip = (startingSquareId, playerShip) => {
 };
 
 const isBombableSquare = square => {
-  return square.status === SquareStatus.HIT ||
-    square.status === SquareStatus.MISS
-    ? false
-    : true;
+  return square.status === SquareStatus.HIT || square.status === SquareStatus.MISS ? false : true;
 };
 
 const bombSquare = square => {
@@ -115,10 +112,7 @@ const getBombingStatusMessage = bombedSquareStatus => {
 };
 
 const allShipsDestroyed = (ships, playerBoard) => {
-  const totalShipSquares = Object.values(ships).reduce(
-    (total, ship) => total + ship.size,
-    0
-  );
+  const totalShipSquares = Object.values(ships).reduce((total, ship) => total + ship.size, 0);
 
   const totalHitSquares = Object.values(playerBoard).reduce(
     (total, square) => (square.status === SquareStatus.HIT ? total + 1 : total),
@@ -131,13 +125,14 @@ const allShipsDestroyed = (ships, playerBoard) => {
 const isValidShipPlacement = (shipId, ships, boardSize) => {
   const otherShipSquares = Object.values(ships)
     .filter(ship => Number(ship.id) !== Number(shipId))
-    .map(ship => ship.squareIds)
-    .flat();
+    .map(ship => ship.squareIds);
+
+  const flattenedOtherShipSquares = [].concat.apply([], otherShipSquares);
 
   // Check if any ships are intersecting
-  const shipCollison = ships[shipId].squareIds.some(squareId =>
-    otherShipSquares.includes(squareId)
-  );
+  const shipCollison = ships[shipId].squareIds.some(squareId => {
+    return flattenedOtherShipSquares.includes(squareId);
+  });
 
   // Check if any part of ship if off board
   const outOfBounds = ships[shipId].squareIds.some(squareId => {
@@ -145,10 +140,7 @@ const isValidShipPlacement = (shipId, ships, boardSize) => {
     const rowIndex = Number(rowCols[0]);
     const colIndex = Number(rowCols[1]);
     const rowColOutOfBounds =
-      rowIndex > boardSize - 1 ||
-      rowIndex < 0 ||
-      colIndex > boardSize - 1 ||
-      colIndex < 0;
+      rowIndex > boardSize - 1 || rowIndex < 0 || colIndex > boardSize - 1 || colIndex < 0;
 
     return rowColOutOfBounds;
   });
@@ -174,7 +166,7 @@ export default (state = {}, action) => {
       };
 
     case "ON_PLACE_SHIP_HOVER_ACTION":
-      const hoverSquareId = action.payload.id;
+      const hoverSquareId = action.payload ? action.payload.id : state.currentHoverSquareId;
       const currentPlayerId = state.currentPlayerId;
       const currentPlayerBoard = state.playerBoards[currentPlayerId];
       const currentShipId = state.currentShipId;
@@ -194,6 +186,7 @@ export default (state = {}, action) => {
 
       return {
         ...state,
+        currentHoverSquareId: hoverSquareId,
         playerShips: {
           ...state.playerShips,
           [currentPlayerId]: {
@@ -209,42 +202,22 @@ export default (state = {}, action) => {
       };
 
     case "ON_PLACE_SHIP_ROTATE_ACTION":
-      const currentShip =
-        state.playerShips[state.currentPlayerId][state.currentShipId];
+      const currentShip = state.playerShips[state.currentPlayerId][state.currentShipId];
       const updatedOrientation =
         currentShip.orientation === ShipOrientation.HORIZONTAL
           ? ShipOrientation.VERTICAL
           : ShipOrientation.HORIZONTAL;
-
-      const rotatedPlayerShips = {
-        ...state.playerShips[state.currentPlayerId],
-        [state.currentShipId]: {
-          ...currentShip,
-          orientation: updatedOrientation
-        }
-      };
-
-      const rotatedPlayerSquares = {
-        ...state.playerBoards[state.currentPlayerId],
-        ...resetPlayerSquares(state.playerBoards[state.currentPlayerId]),
-        ...setPlayerShipSquares(
-          rotatedPlayerShips,
-          state.playerBoards[state.currentPlayerId]
-        )
-      };
 
       return {
         ...state,
         playerShips: {
           ...state.playerShips,
           [state.currentPlayerId]: {
-            ...rotatedPlayerShips
-          }
-        },
-        playerBoards: {
-          ...state.playerBoards,
-          [state.currentPlayerId]: {
-            ...rotatedPlayerSquares
+            ...state.playerShips[state.currentPlayerId],
+            [state.currentShipId]: {
+              ...currentShip,
+              orientation: updatedOrientation
+            }
           }
         }
       };
@@ -263,8 +236,7 @@ export default (state = {}, action) => {
       }
 
       const nextShipId = Number(state.currentShipId) + 1;
-      const nextShipExists =
-        state.playerShips[state.currentPlayerId][nextShipId];
+      const nextShipExists = state.playerShips[state.currentPlayerId][nextShipId];
 
       // continue placing ships
       if (nextShipExists) {
@@ -295,8 +267,7 @@ export default (state = {}, action) => {
 
     case "PROCEED_TO_NEXT_STAGE_ACTION":
       const nextStage =
-        state.stage === Stages.DONE_PLACING_SHIPS ||
-        state.stage === Stages.PLAYER_TURN_FINISHED
+        state.stage === Stages.DONE_PLACING_SHIPS || state.stage === Stages.PLAYER_TURN_FINISHED
           ? Stages.GAME
           : state.stage;
       return {
@@ -312,8 +283,7 @@ export default (state = {}, action) => {
         };
       }
 
-      const bombedSquare =
-        state.playerBoards[state.opponentPlayerId][action.payload.id];
+      const bombedSquare = state.playerBoards[state.opponentPlayerId][action.payload.id];
       if (!bombedSquare || !isBombableSquare(bombedSquare)) {
         return {
           ...state
@@ -323,9 +293,9 @@ export default (state = {}, action) => {
       const bombedSquareStatus = bombSquare(bombedSquare);
       let bombingStatusMessage = getBombingStatusMessage(bombedSquareStatus);
 
-      const bombedShip = Object.values(
-        state.playerShips[state.opponentPlayerId]
-      ).filter(ship => ship.squareIds.includes(bombedSquare.id))[0];
+      const bombedShip = Object.values(state.playerShips[state.opponentPlayerId]).filter(ship =>
+        ship.squareIds.includes(bombedSquare.id)
+      )[0];
 
       if (bombedShip) {
         const otherShipSquaresHit = bombedShip.squareIds
@@ -354,12 +324,7 @@ export default (state = {}, action) => {
       };
 
     case "ON_PLAYER_TURN_FINISHED_ACTION":
-      if (
-        allShipsDestroyed(
-          state.ships,
-          state.playerBoards[state.opponentPlayerId]
-        )
-      ) {
+      if (allShipsDestroyed(state.ships, state.playerBoards[state.opponentPlayerId])) {
         return {
           ...state,
           stage: Stages.GAME_FINISHED,

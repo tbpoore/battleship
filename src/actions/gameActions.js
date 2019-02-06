@@ -25,10 +25,9 @@ export const onPlaceShipHoverAction = squareData => {
   };
 };
 
-export const onPlaceShipClickAction = squareData => {
+export const onPlaceShipClickAction = () => {
   return {
-    type: "ON_PLACE_SHIP_CLICK_ACTION",
-    payload: squareData
+    type: "ON_PLACE_SHIP_CLICK_ACTION"
   };
 };
 

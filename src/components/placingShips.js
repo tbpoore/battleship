@@ -22,7 +22,7 @@ class PlacingShips extends Component {
    * @summary handle board placing shipclick actions
    */
   onPlaceShipClickAction = squareData => {
-    this.props.onPlaceShipClickAction(squareData);
+    this.props.onPlaceShipClickAction();
   };
 
   /**
@@ -32,6 +32,7 @@ class PlacingShips extends Component {
   onPlaceShipRotateAction = event => {
     event.preventDefault();
     this.props.onPlaceShipRotateAction();
+    this.props.onPlaceShipHoverAction();
   };
 
   render() {
@@ -53,7 +54,7 @@ class PlacingShips extends Component {
             onSquareHover={this.onPlaceShipHoverAction}
             onSquareClick={this.onPlaceShipClickAction}
           />
-          <Typography variant="h6">
+          <Typography variant="h6" color="primary">
             Tip: Use enter key to rotate ship
           </Typography>
         </React.Fragment>

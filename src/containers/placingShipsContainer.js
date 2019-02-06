@@ -7,7 +7,7 @@ import PlacingShips from '../components/placingShips';
  */
 const mapDispatchToProps = dispatch => ({
   onPlaceShipHoverAction: squareData => dispatch(onPlaceShipHoverAction(squareData)),
-  onPlaceShipClickAction: squareData => dispatch(onPlaceShipClickAction(squareData)),
+  onPlaceShipClickAction: () => dispatch(onPlaceShipClickAction()),
   onPlaceShipRotateAction: () => dispatch(onPlaceShipRotateAction())
 });
 
