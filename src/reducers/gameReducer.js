@@ -159,19 +159,6 @@ const isValidShipPlacement = (shipId, ships, boardSize) => {
 export default (state = {}, action) => {
   switch (action.type) {
     case "START_NEW_GAME_ACTION":
-      console.log(JSON.stringify({
-        ...state,
-        stage: Stages.PLACING_SHIPS,
-        currentPlayerId: "1",
-        opponentPlayerId: "2",
-        currentShipId: "1",
-        gameBoard: createEmptyBoard(state.boardSize),
-        playerBoards: {
-          1: initializePlayerBoardSquares(state.boardSize),
-          2: initializePlayerBoardSquares(state.boardSize)
-        },
-        bombingStatusMessage: ""
-      }));
       return {
         ...state,
         stage: Stages.PLACING_SHIPS,
