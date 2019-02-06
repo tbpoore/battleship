@@ -1,0 +1,75 @@
+.App {
+  text-align: center;
+  padding: 30px;
+}
+
+.App-logo {
+  animation: App-logo-bob infinite 5s linear;
+  height: 15vmin;
+}
+
+@keyframes App-logo-bob {
+  0%   {transform: rotate(0deg);}
+  25%  {transform: rotate(3deg);}
+  50%  {transform: rotate(0deg);}
+  75%  {transform: rotate(-3deg);}
+  100% {transform: rotate(0deg);}
+}
+
+.GameBoard > table { 
+  border-collapse: collapse; 
+  border-spacing: 0; 
+  padding: 0px; 
+  margin: 0 auto; 
+  border: 2px solid #000000; 
+}
+
+.GameBoard > table tr td { 
+  width: 60px; 
+  height: 60px; 
+}
+
+.GameBoard > table td { 
+  width: 60px; 
+  height: 60px;
+  border: 0.5px solid #919090; 
+  vertical-align: middle;
+}
+
+.GameBoard > table td.Square-open {
+  background-color: #c0e0f3;
+}
+
+.GameBoard > table td.Square-ship {
+  background-color: #919090;
+}
+
+.GameBoard > table td.Square-hit {
+  background-color: #fd5757;
+}
+
+.GameBoard > table td.Square-miss{
+  background-color: #000000;
+}
+
+.GameBoard > table td .Square-button {
+  background: rgba(0, 0, 0, 0);
+  border-radius: 0;
+  border: 0;
+  color: rgb(253, 253, 253);
+  height: 60px;
+  width: 60px;
+  padding: 0;
+  box-shadow: 0 rgba(0, 0, 0, 0);
+}
+
+.GameBoard .Square-crosshairs {
+  width: 60px;
+  height: 60px;
+  display: none;
+}
+
+.Game-opponent .GameBoard .Square-open:active .Square-crosshairs,
+.Game-opponent .GameBoard .Square-open:hover .Square-crosshairs {
+  display: block;
+}
