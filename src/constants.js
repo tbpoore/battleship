@@ -18,3 +18,7 @@ export const Stages = {
   PLAYER_TURN_FINISHED: "PLAYER_TURN_FINISHED",
   GAME_FINISHED: "GAME_FINISHED"
 };
+
+export const SnackActions = {
+  NEXT_PLAYER_TURN: "NEXT_PLAYER_TURN"
+};

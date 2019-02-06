@@ -7,6 +7,7 @@ import Menu from "./components/menu";
 import PlacingShipsContainer from "./containers/placingShipsContainer";
 import NextStageContainer from "./containers/nextStageContainer";
 import { Stages } from "./constants";
+import GameSnackbarContainer from "./containers/gameSnackbarContainer";
 
 /*
  * mapDispatchToProps
@@ -27,6 +28,7 @@ class App extends Component {
     const { stage } = this.props;
     return (
       <div className="App">
+        <GameSnackbarContainer />
         <NextStageContainer />
         {stage === Stages.MENU && (
           <Menu startNewGame={this.props.startNewGameAction} />

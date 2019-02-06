@@ -1,4 +1,4 @@
-import { SquareStatus, ShipOrientation, Stages } from "../constants";
+import { SquareStatus, ShipOrientation, Stages, SnackActions } from "../constants";
 
 const createEmptyBoard = size => {
   return Array(size)
@@ -148,6 +148,15 @@ const isValidShipPlacement = (shipId, ships, boardSize) => {
   return !shipCollison && !outOfBounds;
 };
 
+const getEmptySnack = () => {
+  return {
+    open: false,
+    message: "",
+    actionMessage: "",
+    action: ""
+  };
+};
+
 export default (state = {}, action) => {
   switch (action.type) {
     case "START_NEW_GAME_ACTION":
@@ -162,7 +171,7 @@ export default (state = {}, action) => {
           1: initializePlayerBoardSquares(state.boardSize),
           2: initializePlayerBoardSquares(state.boardSize)
         },
-        bombingStatusMessage: ""
+        snack: getEmptySnack()
       };
 
     case "ON_PLACE_SHIP_HOVER_ACTION":
@@ -276,8 +285,8 @@ export default (state = {}, action) => {
       };
 
     case "ON_BOMB_CLICK_ACTION":
-      // prevent multiple bomb clicks
-      if (state.bombingStatusMessage) {
+      // don't allow multiple bombing actions when snack message is showing
+      if (state.snack.open) {
         return {
           ...state
         };
@@ -304,13 +313,18 @@ export default (state = {}, action) => {
           .every(square => square.status === SquareStatus.HIT);
 
         if (otherShipSquaresHit) {
-          bombingStatusMessage = "YOU SANK MY BATTLE SHIP!";
+          bombingStatusMessage = "BRO! YOU SANK MY BATTLESHIP!";
         }
       }
 
       return {
         ...state,
-        bombingStatusMessage: bombingStatusMessage,
+        snack: {
+          open: true,
+          message: bombingStatusMessage,
+          actionMessage: "CONTINUE",
+          action: SnackActions.NEXT_PLAYER_TURN
+        },
         playerBoards: {
           ...state.playerBoards,
           [state.opponentPlayerId]: {
@@ -323,7 +337,16 @@ export default (state = {}, action) => {
         }
       };
 
-    case "ON_PLAYER_TURN_FINISHED_ACTION":
+    case "ON_SNACKBAR_CLOSE_ACTION":
+      return {
+        ...state,
+        snack: {
+          ...action.payload,
+          open: false
+        }
+      };
+
+    case "ON_NEXT_PLAYER_TURN_ACTION":
       if (allShipsDestroyed(state.ships, state.playerBoards[state.opponentPlayerId])) {
         return {
           ...state,
@@ -336,8 +359,7 @@ export default (state = {}, action) => {
         ...state,
         currentPlayerId: state.opponentPlayerId,
         opponentPlayerId: state.currentPlayerId,
-        stage: Stages.PLAYER_TURN_FINISHED,
-        bombingStatusMessage: ""
+        stage: Stages.PLAYER_TURN_FINISHED
       };
     default:
       return state;

@@ -14,7 +14,6 @@ const getCleanGameState = () => {
     currentPlayerId: "1",
     opponentPlayerId: "2",
     currentHoverSquareId: "",
-    bombingStatusMessage: "",
     playerBoards: {
       "1": {
         "0_0": { id: "0_0", status: "OPEN" },
@@ -66,7 +65,6 @@ describe("gameReducer", () => {
   describe("startNewGameAction", () => {
     it("should reset current players and put stage into PLACING_SHIPS", () => {
       expect(reducer({}, startNewGameAction())).toEqual({
-        bombingStatusMessage: "",
         currentPlayerId: "1",
         currentShipId: "1",
         gameBoard: [["0_0"]],
@@ -75,6 +73,7 @@ describe("gameReducer", () => {
           "1": { "0_0": { id: "0_0", status: "OPEN" } },
           "2": { "0_0": { id: "0_0", status: "OPEN" } }
         },
+        snack: { action: "", actionMessage: "", message: "", open: false },
         stage: "PLACING_SHIPS"
       });
     });

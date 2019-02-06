@@ -39,7 +39,7 @@ class NextStage extends Component {
         {stage === Stages.PLAYER_TURN_FINISHED && (
           <>
             <Typography variant="h2" gutterBottom>
-              NEXT TURN
+              NEXT TURN: PLAYER {currentPlayerId}
             </Typography>
             <Button
               onClick={this.handleProceedClick}

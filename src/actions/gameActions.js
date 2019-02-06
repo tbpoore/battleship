@@ -1,3 +1,5 @@
+import { SnackActions } from "../constants";
+
 export const introAction = () => {
   return {
     type: "INTRO_ACTION",
@@ -43,8 +45,24 @@ export const proceedToNextStageAction = () => {
   };
 };
 
-export const onPlayerTurnFinishedAction = () => {
+export const onSnackbarCloseAction = snack => {
   return {
-    type: "ON_PLAYER_TURN_FINISHED_ACTION"
+    type: "ON_SNACKBAR_CLOSE_ACTION",
+    payload: snack
   };
+};
+
+export const onSnackbarAction = snack => {
+  switch (snack.action) {
+    case SnackActions.NEXT_PLAYER_TURN:
+      return {
+        type: "ON_NEXT_PLAYER_TURN_ACTION"
+      };
+
+    default:
+      return {
+        type: "ON_SNACKBAR_CLOSE_ACTION",
+        payload: snack
+      };
+  }
 };

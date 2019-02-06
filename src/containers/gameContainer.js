@@ -1,16 +1,12 @@
 import { connect } from "react-redux";
-import {
-  onBombClickAction,
-  onPlayerTurnFinishedAction
-} from "../actions/gameActions";
+import { onBombClickAction } from "../actions/gameActions";
 import Game from "../components/game";
 
 /*
  * mapDispatchToProps
  */
 const mapDispatchToProps = dispatch => ({
-  onBombClickAction: squareData => dispatch(onBombClickAction(squareData)),
-  onPlayerTurnFinishedAction: () => dispatch(onPlayerTurnFinishedAction())
+  onBombClickAction: squareData => dispatch(onBombClickAction(squareData))
 });
 
 /*
@@ -22,8 +18,7 @@ const mapStateToProps = state => ({
   currentPlayerId: state.game.currentPlayerId,
   opponentPlayerId: state.game.opponentPlayerId,
   placingShips: state.game.placingShips,
-  stage: state.game.stage,
-  bombingStatusMessage: state.game.bombingStatusMessage
+  stage: state.game.stage
 });
 
 export default connect(

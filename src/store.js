@@ -25,7 +25,11 @@ const initialGameState = {
     currentPlayerId: "1",
     opponentPlayerId: "2",
     currentHoverSquareId: "",
-    bombingStatusMessage: "",
+    snack: {
+      open: true,
+      message: "",
+      actionMessage: ""
+    },
     playerBoards: {
       1: {},
       2: {}
